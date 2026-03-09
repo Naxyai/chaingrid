@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Wallet, RefreshCw, TrendingUp, Users, ArrowDownToLine, Zap, Award, ChevronRight } from 'lucide-react';
+import { Wallet, RefreshCw, TrendingUp, Users, ArrowDownToLine, Zap, Award, ChevronRight, Gift, Star, DollarSign } from 'lucide-react';
 import Layout from '../components/Layout';
 import WalletModal from '../components/WalletModal';
 import { useApp } from '../context/AppContext';
@@ -9,6 +9,7 @@ import { useBoard } from '../hooks/useBoard';
 import { getUserCycles } from '../lib/supabase';
 import { shortenAddress } from '../lib/web3';
 import { Cycle } from '../types';
+import { getRankInfo, CYCLE1_REFERRALS_REQUIRED, CYCLE2_REFERRALS_REQUIRED, FREE_CYCLE_THRESHOLD, COMMISSION_UNLOCK_CYCLES } from '../lib/constants';
 
 export default function Dashboard() {
   const { wallet, user, refreshUser } = useApp();
@@ -40,16 +41,27 @@ export default function Dashboard() {
     );
   }
 
+  const totalCycles = user?.total_cycles_completed ?? 0;
+  const isPostHundred = totalCycles >= FREE_CYCLE_THRESHOLD;
+  const isFirstCycle = (user?.cycle_number ?? 1) === 1;
+  const refsRequired = isPostHundred ? 0 : isFirstCycle ? CYCLE1_REFERRALS_REQUIRED : CYCLE2_REFERRALS_REQUIRED;
+  const savedRefs = user?.saved_referrals ?? 0;
+  const currentCredits = user?.referral_credits ?? 0;
+  const totalAvailable = currentCredits + savedRefs;
+  const refsStillNeeded = Math.max(0, refsRequired - totalAvailable);
+  const rankInfo = getRankInfo(user?.rank ?? 'none');
+  const cyclesLeftForVip = Math.max(0, COMMISSION_UNLOCK_CYCLES - totalCycles);
+
   const statCards = [
     { label: 'Current Cycle', value: user?.cycle_number ?? 1, sub: 'Active cycle', icon: RefreshCw, color: 'blue' },
-    { label: 'Referral Credits', value: user?.referral_credits ?? 0, sub: 'Available credits', icon: Users, color: 'purple' },
+    { label: 'Cycles Completed', value: totalCycles, sub: 'Total completions', icon: Award, color: 'yellow' },
     { label: 'Withdrawable', value: `$${(user?.withdrawable_balance ?? 0).toFixed(2)}`, sub: 'Ready to claim', icon: ArrowDownToLine, color: 'green' },
-    { label: 'Cycles Completed', value: user?.total_cycles_completed ?? 0, sub: 'Total completions', icon: Award, color: 'yellow' },
+    { label: 'Commission Earned', value: `$${(user?.commission_earned ?? 0).toFixed(2)}`, sub: 'Total commissions', icon: DollarSign, color: 'teal' },
   ];
 
   return (
     <Layout>
-      <div className="mb-8">
+      <div className="mb-8 mt-6">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="glass-card rounded-2xl p-6 border border-blue-500/10">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -90,7 +102,7 @@ export default function Dashboard() {
           >
             <div className={`w-9 h-9 rounded-lg mb-3 flex items-center justify-center ${
               stat.color === 'blue' ? 'bg-blue-500/20 text-blue-400' :
-              stat.color === 'purple' ? 'bg-purple-500/20 text-purple-400' :
+              stat.color === 'teal' ? 'bg-teal-500/20 text-teal-400' :
               stat.color === 'green' ? 'bg-green-500/20 text-green-400' :
               'bg-yellow-500/20 text-yellow-400'
             }`}>
@@ -101,6 +113,55 @@ export default function Dashboard() {
             <div className="text-gray-600 text-xs mt-0.5">{stat.sub}</div>
           </motion.div>
         ))}
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className={`glass-card rounded-xl p-5 border ${rankInfo.borderColor}`}>
+          <div className="flex items-center gap-3 mb-2">
+            <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${rankInfo.bgColor}`}>
+              <Star size={18} className={rankInfo.color} />
+            </div>
+            <div>
+              <p className="text-gray-400 text-xs uppercase tracking-wider">Current Rank</p>
+              <p className={`font-black text-lg ${rankInfo.color}`}>{rankInfo.label}</p>
+            </div>
+          </div>
+          {(user?.rank ?? 'none') === 'none' ? (
+            <p className="text-gray-500 text-xs">{cyclesLeftForVip} more cycle{cyclesLeftForVip !== 1 ? 's' : ''} to unlock VIP</p>
+          ) : (
+            <p className="text-gray-400 text-xs">{rankInfo.commissionRate}% commission on referral withdrawals</p>
+          )}
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="glass-card rounded-xl p-5 border border-yellow-500/20">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-yellow-500/20">
+              <Gift size={18} className="text-yellow-400" />
+            </div>
+            <div>
+              <p className="text-gray-400 text-xs uppercase tracking-wider">Saved Referrals</p>
+              <p className="font-black text-lg text-yellow-400">{savedRefs}</p>
+            </div>
+          </div>
+          <p className="text-gray-500 text-xs">Auto-applied to future cycles</p>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className={`glass-card rounded-xl p-5 border ${refsStillNeeded > 0 ? 'border-orange-500/20' : 'border-green-500/20'}`}>
+          <div className="flex items-center gap-3 mb-2">
+            <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${refsStillNeeded > 0 ? 'bg-orange-500/20' : 'bg-green-500/20'}`}>
+              <Users size={18} className={refsStillNeeded > 0 ? 'text-orange-400' : 'text-green-400'} />
+            </div>
+            <div>
+              <p className="text-gray-400 text-xs uppercase tracking-wider">Refs Needed</p>
+              <p className={`font-black text-lg ${refsStillNeeded > 0 ? 'text-orange-400' : 'text-green-400'}`}>
+                {refsStillNeeded === 0 ? 'Ready' : refsStillNeeded}
+              </p>
+            </div>
+          </div>
+          <p className="text-gray-500 text-xs">
+            {isPostHundred ? 'No referrals required (post 100)' : `${totalAvailable} / ${refsRequired} credits available`}
+          </p>
+        </motion.div>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6 mb-8">

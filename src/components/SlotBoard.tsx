@@ -28,7 +28,7 @@ export default function SlotBoard({ slots, userAddress, compact = false, lastMov
   for (let row = 0; row < 10; row++) {
     const rowSlots = [];
     for (let col = 0; col < 10; col++) {
-      const slotNumber = 100 - (row * 10 + col);
+      const slotNumber = row * 10 + col + 1;
       rowSlots.push(slotNumber);
     }
     rows.push(rowSlots);
@@ -60,7 +60,7 @@ export default function SlotBoard({ slots, userAddress, compact = false, lastMov
                       : styleClass === 'exit-slot'
                       ? 'bg-green-500/20 border border-green-500/60'
                       : styleClass === 'entry-slot'
-                      ? 'bg-purple-500/20 border border-purple-500/60'
+                      ? 'bg-blue-500/20 border border-blue-500/60'
                       : styleClass === 'occupied-slot'
                       ? 'bg-slate-700/60 border border-slate-600/60 hover:border-blue-500/40 hover:bg-slate-700/80'
                       : 'bg-slate-800/30 border border-slate-700/30'
@@ -73,7 +73,7 @@ export default function SlotBoard({ slots, userAddress, compact = false, lastMov
 
                   <span className={`${textSize} font-bold leading-none ${
                     slotNumber === 1 ? 'text-green-400' :
-                    slotNumber === 100 ? 'text-purple-400' :
+                    slotNumber === 100 ? 'text-blue-400' :
                     isUser ? 'text-blue-300' :
                     slot?.wallet_address ? 'text-slate-300' : 'text-slate-600'
                   }`}>
@@ -107,11 +107,11 @@ export default function SlotBoard({ slots, userAddress, compact = false, lastMov
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded bg-green-500/20 border border-green-500/60" />
-          <span className="text-gray-400">Exit (Slot 1)</span>
+          <span className="text-gray-400">Exit (Slot 1) — Top</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded bg-purple-500/20 border border-purple-500/60" />
-          <span className="text-gray-400">Entry (Slot 100)</span>
+          <div className="w-3 h-3 rounded bg-blue-500/20 border border-blue-500/60" />
+          <span className="text-gray-400">Entry (Slot 100) — Bottom</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded bg-slate-800/30 border border-slate-700/30" />
