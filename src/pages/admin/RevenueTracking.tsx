@@ -75,7 +75,7 @@ export default function RevenueTracking() {
           { label: 'Total Fees (Period)',  value: `$${totalFees.toFixed(2)}`,         color: 'text-green-400' },
           { label: 'Cumulative Fees',      value: `$${latestCumulative.toFixed(2)}`,  color: 'text-teal-400' },
           { label: 'Total Withdrawals',    value: `$${totalWithdrawals.toFixed(2)}`,  color: 'text-yellow-400' },
-          { label: 'Cycles Completed',     value: totalCycles,                        color: 'text-blue-400' },
+          { label: 'Rounds Completed',      value: totalCycles,                        color: 'text-blue-400' },
           { label: 'New Users',            value: totalNewUsers,                      color: 'text-orange-400' },
         ].map((stat, i) => (
           <motion.div key={stat.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }} className="glass-card rounded-xl p-4 text-center">
@@ -125,7 +125,7 @@ export default function RevenueTracking() {
                   <th className="px-4 py-3 font-medium">Date</th>
                   <th className="px-4 py-3 font-medium text-right">Daily Fees</th>
                   <th className="px-4 py-3 font-medium text-right">Withdrawals</th>
-                  <th className="px-4 py-3 font-medium text-center">Cycles</th>
+                  <th className="px-4 py-3 font-medium text-center">Rounds</th>
                   <th className="px-4 py-3 font-medium text-center">New Users</th>
                   <th className="px-4 py-3 font-medium text-right">Cumulative</th>
                 </tr>

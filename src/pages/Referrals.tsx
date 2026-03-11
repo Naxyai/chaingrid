@@ -58,7 +58,7 @@ export default function Referrals() {
     <Layout>
       <div className="mb-8">
         <h1 className="text-3xl font-black text-white mb-2">Referrals</h1>
-        <p className="text-gray-400">Share your link, earn cycle credits, and unlock commissions</p>
+        <p className="text-gray-400">Share your link, earn participation credits, and unlock commissions</p>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -152,7 +152,7 @@ export default function Referrals() {
           </div>
           {(user?.rank ?? 'none') === 'none' && (
             <div className="mt-3 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-xs text-blue-400">
-              {cyclesLeft} more cycle{cyclesLeft !== 1 ? 's' : ''} needed to unlock VIP rank & commissions
+              {cyclesLeft} more round{cyclesLeft !== 1 ? 's' : ''} needed to unlock VIP rank & commissions
             </div>
           )}
           {(user?.rank ?? 'none') !== 'none' && (
@@ -166,14 +166,14 @@ export default function Referrals() {
           <h3 className="text-white font-bold mb-4">Referral Rules</h3>
           <div className="space-y-2.5">
             {[
-              { rule: '1 referral = 1 cycle credit', color: 'blue' },
-              { rule: 'Cycle 1 requires 2 referral credits', color: 'yellow' },
-              { rule: 'Cycles 2+ require 1 referral credit each', color: 'blue' },
-              { rule: 'Cycle 1 pauses if 2 refs not met at slot 1', color: 'orange' },
-              { rule: 'Unused credits saved for future cycles', color: 'green' },
-              { rule: 'After 100 cycles, no referrals needed', color: 'teal' },
-              { rule: 'No credit in cycle 2+ = no reward, auto-roll only', color: 'red' },
-              { rule: 'Commissions unlock after 25 completed cycles', color: 'yellow' },
+              { rule: '1 referral = 1 participation credit', color: 'blue' },
+              { rule: 'Round 1 requires 2 referral credits', color: 'yellow' },
+              { rule: 'Rounds 2+ require 1 referral credit each', color: 'blue' },
+              { rule: 'Round 1 pauses if 2 refs not met at position 1', color: 'orange' },
+              { rule: 'Unused credits saved for future rounds', color: 'green' },
+              { rule: 'After 100 rounds, no referrals needed', color: 'teal' },
+              { rule: 'No credit in round 2+ = no payout, auto-renew only', color: 'red' },
+              { rule: 'Commissions unlock after 25 completed rounds', color: 'yellow' },
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-2">
                 <ChevronRight size={12} className={`mt-0.5 shrink-0 ${
@@ -200,7 +200,7 @@ export default function Referrals() {
               </div>
               <div>
                 <p className="text-white font-semibold text-sm">Saved Referral Credits</p>
-                <p className="text-gray-400 text-xs">Will be used automatically in upcoming cycles</p>
+                <p className="text-gray-400 text-xs">Will be used automatically in upcoming rounds</p>
               </div>
             </div>
             <div className="text-yellow-400 font-black text-2xl">{savedCredits}</div>
@@ -215,7 +215,7 @@ export default function Referrals() {
         </h3>
         {referrals.length === 0 ? (
           <div className="text-center py-8 text-gray-400 text-sm">
-            No referrals yet. Share your link to start earning credits!
+            No referrals yet. Share your link to start earning participation credits!
           </div>
         ) : (
           <div className="overflow-x-auto">

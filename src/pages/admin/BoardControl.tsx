@@ -100,7 +100,7 @@ export default function BoardControl() {
                 <tr className="text-left text-gray-500 text-xs">
                   <th className="px-4 py-3 font-medium">Position</th>
                   <th className="px-4 py-3 font-medium">Wallet</th>
-                  <th className="px-4 py-3 font-medium text-center">Cycle</th>
+                  <th className="px-4 py-3 font-medium text-center">Round</th>
                   <th className="px-4 py-3 font-medium text-center">Type</th>
                   <th className="px-4 py-3 font-medium text-right">Joined</th>
                   <th className="px-4 py-3 font-medium text-right">Action</th>

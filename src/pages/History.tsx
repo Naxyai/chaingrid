@@ -12,8 +12,8 @@ type Tab = 'cycles' | 'withdrawals' | 'transactions';
 
 const TX_STYLES: Record<Transaction['type'], { label: string; color: string; bg: string; icon: React.ElementType }> = {
   deposit:             { label: 'Deposit',        color: 'text-blue-400',   bg: 'bg-blue-500/20',   icon: ArrowDownToLine },
-  cycle_reward:        { label: 'Cycle Reward',   color: 'text-green-400',  bg: 'bg-green-500/20',  icon: RefreshCw },
-  rollin:              { label: 'Auto-Roll',       color: 'text-teal-400',   bg: 'bg-teal-500/20',   icon: Zap },
+  cycle_reward:        { label: 'Round Payout',    color: 'text-green-400',  bg: 'bg-green-500/20',  icon: RefreshCw },
+  rollin:              { label: 'Auto-Renew',      color: 'text-teal-400',   bg: 'bg-teal-500/20',   icon: Zap },
   referral_commission: { label: 'Commission',     color: 'text-yellow-400', bg: 'bg-yellow-500/20', icon: Users },
   withdrawal:          { label: 'Withdrawal',     color: 'text-orange-400', bg: 'bg-orange-500/20', icon: ArrowDownToLine },
   withdrawal_fee:      { label: 'Platform Fee',   color: 'text-red-400',    bg: 'bg-red-500/20',    icon: DollarSign },
@@ -58,7 +58,7 @@ export default function History() {
   }
 
   const tabConfig: { key: Tab; label: string; count: number }[] = [
-    { key: 'cycles', label: 'Cycles', count: cycles.length },
+    { key: 'cycles', label: 'Rounds', count: cycles.length },
     { key: 'withdrawals', label: 'Withdrawals', count: withdrawals.length },
     { key: 'transactions', label: 'Transactions', count: transactions.length },
   ];
@@ -67,7 +67,7 @@ export default function History() {
     <Layout>
       <div className="mb-8">
         <h1 className="text-3xl font-black text-white mb-2">History & Transparency</h1>
-        <p className="text-gray-400">Complete record of your cycles, withdrawals, and transactions</p>
+        <p className="text-gray-400">Complete record of your rounds, withdrawals, and transactions</p>
       </div>
 
       <div className="flex gap-2 mb-6 p-1 rounded-xl bg-slate-800/40 border border-white/5 w-fit">
@@ -95,18 +95,18 @@ export default function History() {
           {cycles.length === 0 ? (
             <div className="text-center py-16 text-gray-400">
               <RefreshCw size={32} className="mx-auto mb-3 opacity-30" />
-              <p>No cycles completed yet</p>
+              <p>No rounds completed yet</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="border-b border-white/5">
                   <tr className="text-left text-gray-500 text-xs">
-                    <th className="p-4 font-medium">Cycle #</th>
+                    <th className="p-4 font-medium">Round #</th>
                     <th className="p-4 font-medium">Status</th>
                     <th className="p-4 font-medium text-right">Deposit</th>
                     <th className="p-4 font-medium text-right">Gross</th>
-                    <th className="p-4 font-medium text-right">Net Reward</th>
+                    <th className="p-4 font-medium text-right">Net Payout</th>
                     <th className="p-4 font-medium text-right">Date</th>
                   </tr>
                 </thead>
@@ -119,7 +119,7 @@ export default function History() {
                       transition={{ delay: i * 0.03 }}
                       className="border-b border-white/3 hover:bg-white/2 transition-colors"
                     >
-                      <td className="p-4 text-white font-bold">#{cycle.cycle_number}</td>
+                      <td className="p-4 text-white font-bold">Round #{cycle.cycle_number}</td>
                       <td className="p-4">
                         <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                           cycle.status === 'completed' ? 'bg-green-500/20 text-green-400' :

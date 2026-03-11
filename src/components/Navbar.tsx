@@ -42,7 +42,7 @@ export default function Navbar() {
                 <Zap size={16} className="text-blue-400" />
               </div>
               <span className="text-white font-bold text-lg tracking-tight">
-                Chain<span className="text-blue-400">Grid</span>
+                100<span className="text-blue-400">Cycle</span>
               </span>
             </Link>
 

@@ -32,7 +32,7 @@ export default function Dashboard() {
               <Wallet size={32} className="text-blue-400" />
             </div>
             <h2 className="text-2xl font-black text-white mb-3">Connect to Access Dashboard</h2>
-            <p className="text-gray-400 mb-6">Link your MetaMask wallet to view your game stats, progress, and earnings.</p>
+            <p className="text-gray-400 mb-6">Link your MetaMask wallet to view your contribution stats, progress, and payouts.</p>
             <button onClick={() => setWalletOpen(true)} className="btn-primary px-6 py-3">Connect Wallet</button>
           </div>
         </div>
@@ -53,8 +53,8 @@ export default function Dashboard() {
   const cyclesLeftForVip = Math.max(0, COMMISSION_UNLOCK_CYCLES - totalCycles);
 
   const statCards = [
-    { label: 'Current Cycle', value: user?.cycle_number ?? 1, sub: 'Active cycle', icon: RefreshCw, color: 'blue' },
-    { label: 'Cycles Completed', value: totalCycles, sub: 'Total completions', icon: Award, color: 'yellow' },
+    { label: 'Current Round', value: user?.cycle_number ?? 1, sub: 'Active round', icon: RefreshCw, color: 'blue' },
+    { label: 'Rounds Completed', value: totalCycles, sub: 'Total completions', icon: Award, color: 'yellow' },
     { label: 'Withdrawable', value: `$${(user?.withdrawable_balance ?? 0).toFixed(2)}`, sub: 'Ready to claim', icon: ArrowDownToLine, color: 'green' },
     { label: 'Commission Earned', value: `$${(user?.commission_earned ?? 0).toFixed(2)}`, sub: 'Total commissions', icon: DollarSign, color: 'teal' },
   ];
@@ -127,7 +127,7 @@ export default function Dashboard() {
             </div>
           </div>
           {(user?.rank ?? 'none') === 'none' ? (
-            <p className="text-gray-500 text-xs">{cyclesLeftForVip} more cycle{cyclesLeftForVip !== 1 ? 's' : ''} to unlock VIP</p>
+            <p className="text-gray-500 text-xs">{cyclesLeftForVip} more round{cyclesLeftForVip !== 1 ? 's' : ''} to unlock VIP</p>
           ) : (
             <p className="text-gray-400 text-xs">{rankInfo.commissionRate}% commission on referral withdrawals</p>
           )}
@@ -143,7 +143,7 @@ export default function Dashboard() {
               <p className="font-black text-lg text-yellow-400">{savedRefs}</p>
             </div>
           </div>
-          <p className="text-gray-500 text-xs">Auto-applied to future cycles</p>
+          <p className="text-gray-500 text-xs">Auto-applied to future rounds</p>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className={`glass-card rounded-xl p-5 border ${refsStillNeeded > 0 ? 'border-orange-500/20' : 'border-green-500/20'}`}>
@@ -168,19 +168,19 @@ export default function Dashboard() {
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="glass-card rounded-xl p-6">
           <h3 className="text-white font-bold mb-5 flex items-center gap-2">
             <TrendingUp size={16} className="text-blue-400" />
-            Board Progress
+            Position Progress
           </h3>
 
           {userSlot ? (
             <div className="space-y-4">
               <div className="flex items-center justify-between p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                <span className="text-gray-300 text-sm">Current Slot</span>
+                <span className="text-gray-300 text-sm">Current Position</span>
                 <span className="text-blue-400 font-bold text-xl">{userSlot.slot_number}</span>
               </div>
 
               <div>
                 <div className="flex justify-between text-xs text-gray-500 mb-2">
-                  <span>Slot {userSlot.slot_number} → Slot 1</span>
+                  <span>Position {userSlot.slot_number} → Position 1</span>
                   <span>{Math.round(((100 - userSlot.slot_number) / 99) * 100)}% complete</span>
                 </div>
                 <div className="w-full bg-slate-700/50 rounded-full h-3">
@@ -198,7 +198,7 @@ export default function Dashboard() {
               <div className="grid grid-cols-2 gap-3 pt-1">
                 <div className="text-center p-3 rounded-lg bg-white/3 border border-white/5">
                   <div className="text-yellow-400 font-bold text-lg">{remainingToComplete}</div>
-                  <div className="text-gray-500 text-xs">Joins needed</div>
+                  <div className="text-gray-500 text-xs">Contributions needed</div>
                 </div>
                 <div className="text-center p-3 rounded-lg bg-white/3 border border-white/5">
                   <div className="text-white font-bold text-lg">{usersAfterYou}</div>
@@ -208,10 +208,10 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="text-center py-8">
-              <p className="text-gray-400 text-sm mb-4">You're not on the board yet.</p>
+              <p className="text-gray-400 text-sm mb-4">You haven't joined the donation board yet.</p>
               <Link to="/board" className="btn-primary text-sm px-4 py-2 inline-flex items-center gap-2">
                 <Zap size={14} />
-                Enter Board
+                Join Now
               </Link>
             </div>
           )}
@@ -228,7 +228,7 @@ export default function Dashboard() {
               <span className="text-white font-bold">$100.00</span>
             </div>
             <div className="flex justify-between items-center p-3 rounded-lg bg-white/3 border border-white/5">
-              <span className="text-gray-400 text-sm">Auto-rolled Amount</span>
+              <span className="text-gray-400 text-sm">Auto-renewed Amount</span>
               <span className="text-blue-400 font-bold">${(user?.auto_rolled_stake ?? 0).toFixed(2)}</span>
             </div>
             <div className="flex justify-between items-center p-3 rounded-lg bg-green-500/10 border border-green-500/20">
@@ -250,20 +250,20 @@ export default function Dashboard() {
         <div className="flex items-center justify-between mb-5">
           <h3 className="text-white font-bold flex items-center gap-2">
             <RefreshCw size={16} className="text-blue-400" />
-            Recent Cycles
+            Recent Rounds
           </h3>
           <Link to="/history" className="text-blue-400 text-sm hover:text-blue-300 flex items-center gap-1">
             View All <ChevronRight size={14} />
           </Link>
         </div>
         {cycles.length === 0 ? (
-          <div className="text-center py-8 text-gray-400 text-sm">No cycles yet. Enter the board to start!</div>
+          <div className="text-center py-8 text-gray-400 text-sm">No rounds yet. Join the donation board to start!</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-gray-500 text-xs border-b border-white/5">
-                  <th className="pb-3 font-medium">Cycle</th>
+                  <th className="pb-3 font-medium">Round</th>
                   <th className="pb-3 font-medium text-center">Status</th>
                   <th className="pb-3 font-medium text-right">Reward</th>
                   <th className="pb-3 font-medium text-right">Date</th>

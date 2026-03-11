@@ -142,9 +142,9 @@ export default function UserManagement() {
                 <tr className="text-left text-gray-500 text-xs">
                   <th className="px-4 py-3 font-medium">Wallet</th>
                   <th className="px-4 py-3 font-medium text-center">Rank</th>
-                  <th className="px-4 py-3 font-medium text-center">Cycles</th>
+                  <th className="px-4 py-3 font-medium text-center">Rounds</th>
                   <th className="px-4 py-3 font-medium text-right">Withdrawable</th>
-                  <th className="px-4 py-3 font-medium text-right">Rollin</th>
+                  <th className="px-4 py-3 font-medium text-right">Renew Bal.</th>
                   <th className="px-4 py-3 font-medium text-center">Refs</th>
                   <th className="px-4 py-3 font-medium text-right">Actions</th>
                 </tr>
@@ -213,9 +213,9 @@ export default function UserManagement() {
               <div className="space-y-4">
                 {([
                   { label: 'Withdrawable Balance ($)', key: 'withdrawable_balance' },
-                  { label: 'Rollin Balance ($)', key: 'rollin_balance' },
+                  { label: 'Renew Balance ($)', key: 'rollin_balance' },
                   { label: 'Saved Referrals', key: 'saved_referrals' },
-                  { label: 'Cycle Number', key: 'cycle_number' },
+                  { label: 'Round Number', key: 'cycle_number' },
                 ] as { label: string; key: keyof EditState }[]).map(({ label, key }) => (
                   <div key={key}>
                     <label className="block text-gray-400 text-xs mb-1">{label}</label>

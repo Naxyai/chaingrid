@@ -34,10 +34,10 @@ function YouTubeIcon({ size = 18 }: { size?: number }) {
 }
 
 const SOCIAL_LINKS = [
-  { label: 'Twitter',  href: 'https://twitter.com/chaingrid',  icon: TwitterIcon,  color: 'hover:text-sky-400 hover:bg-sky-400/10 hover:border-sky-400/30' },
-  { label: 'Telegram', href: 'https://t.me/chaingrid',         icon: TelegramIcon, color: 'hover:text-blue-400 hover:bg-blue-400/10 hover:border-blue-400/30' },
-  { label: 'Medium',   href: 'https://medium.com/@chaingrid',  icon: MediumIcon,   color: 'hover:text-gray-100 hover:bg-white/10 hover:border-white/30' },
-  { label: 'YouTube',  href: 'https://youtube.com/@chaingrid', icon: YouTubeIcon,  color: 'hover:text-red-400 hover:bg-red-400/10 hover:border-red-400/30' },
+  { label: 'Twitter',  href: 'https://twitter.com/100cycle',  icon: TwitterIcon,  color: 'hover:text-sky-400 hover:bg-sky-400/10 hover:border-sky-400/30' },
+  { label: 'Telegram', href: 'https://t.me/100cycle',         icon: TelegramIcon, color: 'hover:text-blue-400 hover:bg-blue-400/10 hover:border-blue-400/30' },
+  { label: 'Medium',   href: 'https://medium.com/@100cycle',  icon: MediumIcon,   color: 'hover:text-gray-100 hover:bg-white/10 hover:border-white/30' },
+  { label: 'YouTube',  href: 'https://youtube.com/@100cycle', icon: YouTubeIcon,  color: 'hover:text-red-400 hover:bg-red-400/10 hover:border-red-400/30' },
 ];
 
 const NAV_LINKS = [
@@ -58,10 +58,10 @@ export default function Footer() {
               <div className="w-8 h-8 rounded-lg bg-blue-500/20 border border-blue-500/40 flex items-center justify-center">
                 <Zap size={16} className="text-blue-400" />
               </div>
-              <span className="text-white font-black text-xl tracking-tight">ChainGrid</span>
+              <span className="text-white font-black text-xl tracking-tight">100Cycle</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed max-w-sm mb-6">
-              A decentralized board game on BNB Smart Chain. 100 slots, transparent on-chain mechanics, automatic rewards — no middlemen.
+              A decentralized donation platform on BNB Smart Chain. 100 positions, transparent on-chain mechanics, automatic payouts — no middlemen.
             </p>
             <div className="flex items-center gap-2">
               {SOCIAL_LINKS.map(s => {
@@ -121,8 +121,8 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-600">
-          <p>&copy; {new Date().getFullYear()} ChainGrid. All rights reserved.</p>
-          <p>Decentralized gaming on BNB Smart Chain — not financial advice.</p>
+          <p>&copy; {new Date().getFullYear()} 100Cycle. All rights reserved.</p>
+          <p>Decentralized donation platform on BNB Smart Chain — not financial advice.</p>
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-green-400" />

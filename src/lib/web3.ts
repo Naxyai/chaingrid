@@ -1,4 +1,4 @@
-import { BNB_CHAIN_CONFIG, BNB_CHAIN_ID } from './constants';
+import { BNB_CHAIN_CONFIG, BNB_CHAIN_ID, USDT_BEP20_ADDRESS, USDT_DECIMALS } from './constants';
 
 declare global {
   interface Window {
@@ -85,4 +85,54 @@ export function onChainChanged(handler: (chainId: string) => void): () => void {
   if (!window.ethereum) return () => {};
   window.ethereum.on('chainChanged', handler as (...args: unknown[]) => void);
   return () => window.ethereum?.removeListener('chainChanged', handler as (...args: unknown[]) => void);
+}
+
+function encodeERC20Transfer(toAddress: string, amountWei: bigint): string {
+  const methodId = '0xa9059cbb';
+  const paddedTo = toAddress.toLowerCase().replace('0x', '').padStart(64, '0');
+  const paddedAmount = amountWei.toString(16).padStart(64, '0');
+  return methodId + paddedTo + paddedAmount;
+}
+
+export async function getUSDTBalance(address: string): Promise<number> {
+  if (!window.ethereum) return 0;
+  try {
+    const balanceOfData =
+      '0x70a08231' + address.toLowerCase().replace('0x', '').padStart(64, '0');
+    const result = (await window.ethereum.request({
+      method: 'eth_call',
+      params: [{ to: USDT_BEP20_ADDRESS, data: balanceOfData }, 'latest'],
+    })) as string;
+    const balanceWei = BigInt(result);
+    return Number(balanceWei) / Math.pow(10, USDT_DECIMALS);
+  } catch {
+    return 0;
+  }
+}
+
+export async function sendUSDTDeposit(
+  fromAddress: string,
+  toAddress: string,
+  amountUSDT: number,
+): Promise<string> {
+  if (!window.ethereum) throw new Error('MetaMask not found. Please install MetaMask.');
+
+  await ensureBNBChain();
+
+  const amountWei = BigInt(Math.floor(amountUSDT * Math.pow(10, USDT_DECIMALS)));
+  const data = encodeERC20Transfer(toAddress, amountWei);
+
+  const txHash = (await window.ethereum.request({
+    method: 'eth_sendTransaction',
+    params: [
+      {
+        from: fromAddress,
+        to: USDT_BEP20_ADDRESS,
+        data,
+        gas: '0x186A0',
+      },
+    ],
+  })) as string;
+
+  return txHash;
 }

@@ -8,8 +8,8 @@ type TxType = 'all' | 'deposit' | 'cycle_reward' | 'rollin' | 'referral_commissi
 
 const TYPE_META: Record<string, { icon: React.ElementType; color: string; bg: string; label: string }> = {
   deposit:             { icon: ArrowDownLeft, color: 'text-blue-400',   bg: 'bg-blue-500/10 border-blue-500/20',     label: 'Deposit' },
-  cycle_reward:        { icon: ArrowUpRight,  color: 'text-green-400',  bg: 'bg-green-500/10 border-green-500/20',   label: 'Cycle Reward' },
-  rollin:              { icon: RotateCcw,     color: 'text-teal-400',   bg: 'bg-teal-500/10 border-teal-500/20',     label: 'Roll-In' },
+  cycle_reward:        { icon: ArrowUpRight,  color: 'text-green-400',  bg: 'bg-green-500/10 border-green-500/20',   label: 'Round Payout' },
+  rollin:              { icon: RotateCcw,     color: 'text-teal-400',   bg: 'bg-teal-500/10 border-teal-500/20',     label: 'Auto-Renew' },
   referral_commission: { icon: Users,         color: 'text-orange-400', bg: 'bg-orange-500/10 border-orange-500/20', label: 'Commission' },
   withdrawal:          { icon: ArrowUpRight,  color: 'text-yellow-400', bg: 'bg-yellow-500/10 border-yellow-500/20', label: 'Withdrawal' },
   withdrawal_fee:      { icon: Minus,         color: 'text-red-400',    bg: 'bg-red-500/10 border-red-500/20',       label: 'Fee' },

@@ -384,7 +384,10 @@ async function triggerAutoRollin(userId: string, walletAddress: string) {
 
   if (!freshUser) return;
   if ((freshUser.rollin_balance ?? 0) < 100) return;
-  if ((freshUser.current_slot ?? 0) > 0) return;
+
+  const addr = walletAddress.toLowerCase();
+  const { data: existingSlot } = await supabase.from('board_state').select('slot_number').eq('wallet_address', addr).maybeSingle();
+  if (existingSlot) return;
 
   await supabase.from('users').update({
     rollin_balance: (freshUser.rollin_balance ?? 0) - 100,
@@ -472,7 +475,14 @@ export async function joinBoard(userId: string, walletAddress: string, referrerI
 export async function autoRollReentry(userId: string, walletAddress: string) {
   const { data: user } = await supabase.from('users').select('rollin_balance, current_slot').eq('id', userId).maybeSingle();
   if (!user || (user.rollin_balance ?? 0) < 100) throw new Error('Insufficient rollin balance');
-  if ((user.current_slot ?? 0) > 0) throw new Error('Already on board');
+
+  const addr = walletAddress.toLowerCase();
+  const { data: existingSlot } = await supabase.from('board_state').select('slot_number').eq('wallet_address', addr).maybeSingle();
+  if (existingSlot) throw new Error('Already on board');
+
+  if ((user.current_slot ?? 0) !== 0) {
+    await supabase.from('users').update({ current_slot: 0, updated_at: new Date().toISOString() }).eq('id', userId);
+  }
 
   await supabase.from('users').update({
     rollin_balance: (user.rollin_balance ?? 0) - 100,
@@ -484,19 +494,68 @@ export async function autoRollReentry(userId: string, walletAddress: string) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Manual roll-in using withdrawable balance
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function manualRollReentry(userId: string, walletAddress: string) {
+  const { data: user } = await supabase.from('users').select('withdrawable_balance, current_slot').eq('id', userId).maybeSingle();
+  if (!user || (user.withdrawable_balance ?? 0) < 100) throw new Error('Insufficient withdrawable balance (need $100)');
+
+  const addr = walletAddress.toLowerCase();
+  const { data: existingSlot } = await supabase.from('board_state').select('slot_number').eq('wallet_address', addr).maybeSingle();
+  if (existingSlot) throw new Error('Already on board');
+
+  if ((user.current_slot ?? 0) !== 0) {
+    await supabase.from('users').update({ current_slot: 0, updated_at: new Date().toISOString() }).eq('id', userId);
+  }
+
+  await supabase.from('users').update({
+    withdrawable_balance: (user.withdrawable_balance ?? 0) - 100,
+    updated_at: new Date().toISOString(),
+  }).eq('id', userId);
+
+  await supabase.from('transactions').insert({
+    user_id: userId,
+    type: 'deposit',
+    amount: 100,
+    description: 'Manual roll-in from withdrawable balance',
+    reference_id: null,
+  });
+
+  await performBoardEntry(userId, walletAddress, 'rollin');
+  return true;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Withdrawal
 // ─────────────────────────────────────────────────────────────────────────────
 
-export async function requestWithdrawal(userId: string, walletAddress: string, grossAmount: number) {
-  const platformFee = grossAmount * 0.1;
-  const netAmount = grossAmount - platformFee;
+export async function requestWithdrawal(
+  userId: string,
+  walletAddress: string,
+  requestedAmount: number,
+) {
+  const { data: user } = await supabase
+    .from('users')
+    .select('withdrawable_balance, total_withdrawn')
+    .eq('id', userId)
+    .maybeSingle();
+
+  const available = user?.withdrawable_balance ?? 0;
+  if (requestedAmount <= 0) throw new Error('Amount must be greater than zero.');
+  if (requestedAmount > available) throw new Error(`Requested amount exceeds available balance of $${available.toFixed(2)}.`);
+
+  const platformFee = requestedAmount * 0.1;
+  const netAmount = requestedAmount - platformFee;
+  const remaining = available - requestedAmount;
 
   const { data, error } = await supabase
     .from('withdrawals')
     .insert({
       user_id: userId,
       wallet_address: walletAddress.toLowerCase(),
-      gross_amount: grossAmount,
+      requested_amount: requestedAmount,
+      gross_amount: requestedAmount,
       platform_fee: platformFee,
       net_amount: netAmount,
       status: 'pending',
@@ -506,10 +565,8 @@ export async function requestWithdrawal(userId: string, walletAddress: string, g
 
   if (error) throw error;
 
-  const { data: user } = await supabase.from('users').select('total_withdrawn').eq('id', userId).maybeSingle();
-
   await supabase.from('users').update({
-    withdrawable_balance: 0,
+    withdrawable_balance: remaining,
     total_withdrawn: (user?.total_withdrawn ?? 0) + netAmount,
     updated_at: new Date().toISOString(),
   }).eq('id', userId);
@@ -526,7 +583,7 @@ export async function requestWithdrawal(userId: string, walletAddress: string, g
       user_id: userId,
       type: 'withdrawal_fee',
       amount: platformFee,
-      description: `10% platform fee on $${grossAmount} withdrawal`,
+      description: `10% platform fee on $${requestedAmount.toFixed(2)} withdrawal`,
       reference_id: data?.id ?? null,
     },
   ]);
@@ -535,4 +592,39 @@ export async function requestWithdrawal(userId: string, walletAddress: string, g
   await supabase.rpc('add_global_company_fee', { p_amount: platformFee });
 
   return data;
+}
+
+export async function executeWithdrawalOnChain(
+  withdrawalId: string,
+  walletAddress: string,
+  netAmount: number,
+): Promise<string> {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const { data: { session } } = await supabase.auth.getSession();
+
+  const res = await fetch(`${supabaseUrl}/functions/v1/process-withdrawal`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${session?.access_token ?? anonKey}`,
+      'Apikey': anonKey,
+    },
+    body: JSON.stringify({
+      withdrawal_id: withdrawalId,
+      wallet_address: walletAddress,
+      net_amount: netAmount,
+    }),
+  });
+
+  const json = await res.json() as { success?: boolean; tx_hash?: string; error?: string; code?: string };
+
+  if (!res.ok) {
+    if (json.code === 'SIGNER_NOT_CONFIGURED') {
+      return 'PENDING_MANUAL';
+    }
+    throw new Error(json.error ?? 'On-chain transfer failed');
+  }
+
+  return json.tx_hash ?? 'PENDING_MANUAL';
 }

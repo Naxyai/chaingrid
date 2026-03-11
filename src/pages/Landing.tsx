@@ -30,12 +30,12 @@ function LayoutGridIcon({ size, className }: { size: number; className?: string 
 }
 
 const FAQ_ITEMS = [
-  { q: 'What is ChainGrid?', a: 'ChainGrid is a decentralized board game on BNB Smart Chain. Players enter a 100-slot board, and every new participant shifts everyone forward one position. Reach slot 1 to complete a cycle and earn rewards.' },
-  { q: 'How much does it cost to enter?', a: 'The entry deposit is $100 USDT (BEP-20). After your first cycle, your stake auto-rolls forward so you never have to manually re-deposit.' },
-  { q: 'Are the rewards automatic?', a: "Yes. Smart contracts handle all reward calculations and payouts on-chain. No admin can freeze or withhold funds — it's fully non-custodial." },
-  { q: 'What are referral commissions?', a: 'Referring new players unlocks commissions based on your rank (VIP: 2%, Elite: 3%, President: 4%, Founder: 5%). Commissions are paid per cycle completion.' },
-  { q: 'What is the Auto-Roll mechanic?', a: "When you complete a cycle, $100 of your reward is automatically re-entered into the next cycle as your deposit. This compounds your position without any action required." },
-  { q: 'How are ranks determined?', a: "Ranks are earned by completing cycles and building a referral network. VIP requires 25 cycles, higher ranks require direct referrals of the same rank tier below you." },
+  { q: 'What is 100Cycle?', a: '100Cycle is a decentralized donation platform on BNB Smart Chain. Members contribute $100 USDT to a 100-position board, and every new participant shifts everyone forward one position. Reach position 1 to complete a round and receive your payout.' },
+  { q: 'How much does it cost to participate?', a: 'The contribution amount is $100 USDT (BEP-20). After your first round completes, your stake automatically re-enters the next round so you never have to manually re-contribute.' },
+  { q: 'Are the payouts automatic?', a: "Yes. Smart contracts handle all payout calculations and distributions on-chain. No admin can freeze or withhold funds — it's fully non-custodial." },
+  { q: 'What are referral commissions?', a: 'Referring new members unlocks commissions based on your rank (VIP: 2%, Elite: 3%, President: 4%, Founder: 5%). Commissions are paid per round completion.' },
+  { q: 'What is the Auto-Renew mechanic?', a: "When you complete a round, $100 of your payout is automatically re-contributed into the next round. This compounds your position without any action required." },
+  { q: 'How are ranks determined?', a: "Ranks are earned by completing contribution rounds and building a referral network. VIP requires 25 completed rounds, higher ranks require direct referrals of the same rank tier below you." },
 ];
 
 export default function Landing() {
@@ -65,16 +65,16 @@ export default function Landing() {
               </div>
 
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.05] mb-6">
-                Enter the Board.{' '}
+                Join the Circle.{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-teal-400 to-green-400">
                   Move Forward.
                 </span>{' '}
-                Earn Rewards.
+                Receive Payouts.
               </h1>
 
               <p className="text-gray-400 text-lg leading-relaxed mb-8 max-w-xl">
-                A decentralized on-chain board game where every new player moves you closer to your reward.
-                100 slots, infinite cycles, transparent mechanics — no trust required.
+                A decentralized on-chain donation platform where every new member moves you closer to your payout.
+                100 positions, infinite rounds, transparent mechanics — no trust required.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-10">
@@ -124,11 +124,11 @@ export default function Landing() {
                 <div className="mt-4 grid grid-cols-3 gap-3 text-center">
                   <div className="p-2 rounded-lg bg-white/3 border border-white/5">
                     <div className="text-white font-black text-lg">{globalStats?.total_users ?? 0}</div>
-                    <div className="text-gray-500 text-[10px]">Players</div>
+                    <div className="text-gray-500 text-[10px]">Members</div>
                   </div>
                   <div className="p-2 rounded-lg bg-white/3 border border-white/5">
                     <div className="text-yellow-400 font-black text-lg">{globalStats?.total_cycles_completed ?? 0}</div>
-                    <div className="text-gray-500 text-[10px]">Cycles</div>
+                    <div className="text-gray-500 text-[10px]">Rounds</div>
                   </div>
                   <div className="p-2 rounded-lg bg-white/3 border border-white/5">
                     <div className="text-green-400 font-black text-lg">${(globalStats?.total_withdrawn_usd ?? 0).toLocaleString()}</div>
@@ -145,8 +145,8 @@ export default function Landing() {
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
               {[
-                { label: 'Total Players',    value: globalStats?.total_users?.toLocaleString() ?? '0',                      icon: Users,      color: 'blue' },
-                { label: 'Cycles Completed', value: globalStats?.total_cycles_completed?.toLocaleString() ?? '0',            icon: Trophy,     color: 'yellow' },
+                { label: 'Total Members',    value: globalStats?.total_users?.toLocaleString() ?? '0',                      icon: Users,      color: 'blue' },
+                { label: 'Rounds Completed', value: globalStats?.total_cycles_completed?.toLocaleString() ?? '0',            icon: Trophy,     color: 'yellow' },
                 { label: 'Total Paid Out',   value: `$${(globalStats?.total_withdrawn_usd ?? 0).toLocaleString()}`,          icon: TrendingUp, color: 'green' },
                 { label: 'Commissions Paid', value: `$${(globalStats?.total_commissions_paid ?? 0).toLocaleString()}`,       icon: DollarSign, color: 'teal' },
               ].map((stat, i) => (
@@ -173,18 +173,18 @@ export default function Landing() {
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs mb-4">
                 Simple Mechanics
               </div>
-              <h2 className="text-3xl sm:text-5xl font-black text-white mb-4">How ChainGrid Works</h2>
+              <h2 className="text-3xl sm:text-5xl font-black text-white mb-4">How 100Cycle Works</h2>
               <p className="text-gray-400 max-w-xl mx-auto text-lg">
-                Four steps from wallet connection to earning on-chain rewards
+                Four steps from wallet connection to receiving on-chain payouts
               </p>
             </motion.div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { num: '01', title: 'Connect Wallet',  desc: 'Link MetaMask to BNB Smart Chain. The platform is completely non-custodial — your keys, your funds.', icon: Zap, color: 'blue' },
-                { num: '02', title: 'Enter the Board', desc: 'Deposit $100 USDT to join at slot 100. Every new entrant moves everyone forward one position automatically.', icon: ArrowRight, color: 'teal' },
-                { num: '03', title: 'Move & Cycle',    desc: "As new players join, your slot number decreases. Reach slot 1 and your cycle is complete — smart contract pays you instantly.", icon: RefreshCw, color: 'yellow' },
-                { num: '04', title: 'Earn & Roll',     desc: '$100 of your reward auto-rolls into the next cycle. Withdraw the rest directly to your wallet anytime.', icon: Trophy, color: 'green' },
+                { num: '01', title: 'Connect Wallet',     desc: 'Link MetaMask to BNB Smart Chain. The platform is completely non-custodial — your keys, your funds.', icon: Zap, color: 'blue' },
+                { num: '02', title: 'Make a Contribution', desc: 'Contribute $100 USDT to join at position 100. Every new member moves everyone forward one position automatically.', icon: ArrowRight, color: 'teal' },
+                { num: '03', title: 'Move & Complete',     desc: "As new members join, your position number decreases. Reach position 1 and your round is complete — smart contract pays you instantly.", icon: RefreshCw, color: 'yellow' },
+                { num: '04', title: 'Receive & Renew',     desc: '$100 of your payout auto-renews into the next round. Withdraw the rest directly to your wallet anytime.', icon: Trophy, color: 'green' },
               ].map((step, i) => (
                 <motion.div key={step.num} {...fadeUp(i * 0.1)} className="glass-card rounded-2xl p-6 relative group hover:border-white/15 transition-all border border-white/6">
                   <div className="absolute -top-3 -left-3 w-8 h-8 rounded-lg bg-slate-800 border border-white/10 flex items-center justify-center text-xs font-bold text-gray-500">
@@ -219,12 +219,12 @@ export default function Landing() {
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { icon: Cpu,        color: 'blue',   badge: 'Fully Automated',  title: 'Smart Contract Engine',    desc: 'All board movements, cycle completions, and reward distributions are executed autonomously by audited BSC smart contracts. Zero human intervention.' },
-                { icon: GitBranch,  color: 'orange', badge: 'Up to 5% Commission', title: 'Multi-Level Referrals', desc: 'Build your referral network to unlock passive commission income. Each rank tier unlocks higher commission percentages on every cycle your referrals complete.' },
-                { icon: RefreshCw,  color: 'teal',   badge: 'Set & Forget',     title: 'Auto-Roll Compounding',    desc: 'Your $100 stake automatically re-enters the next cycle. Compound your position without manual actions — the board engine handles everything.' },
-                { icon: BarChart2,  color: 'green',  badge: '5 Rank Tiers',     title: 'Rank Progression',         desc: 'Progress from Unranked to Founder through cycle completions and referral building. Each rank unlocks higher commission rates and platform privileges.' },
-                { icon: Lock,       color: 'yellow', badge: 'Self-Sovereign',   title: 'Non-Custodial',            desc: "Your funds are never held by ChainGrid. Smart contracts custody assets during active cycles. Withdrawals go directly on-chain to your wallet — no KYC, no gatekeeping." },
-                { icon: Globe,      color: 'cyan',   badge: 'Open to All',      title: 'Permissionless Access',    desc: 'Any wallet on BNB Smart Chain can participate. No registration, no approval process. Connect your wallet and join the next available slot instantly.' },
+                { icon: Cpu,        color: 'blue',   badge: 'Fully Automated',  title: 'Smart Contract Engine',    desc: 'All position movements, round completions, and payout distributions are executed autonomously by audited BSC smart contracts. Zero human intervention.' },
+                { icon: GitBranch,  color: 'orange', badge: 'Up to 5% Commission', title: 'Multi-Level Referrals', desc: 'Build your referral network to unlock passive commission income. Each rank tier unlocks higher commission percentages on every round your referrals complete.' },
+                { icon: RefreshCw,  color: 'teal',   badge: 'Set & Forget',     title: 'Auto-Renew Compounding',   desc: 'Your $100 contribution automatically re-enters the next round. Compound your position without manual actions — the platform engine handles everything.' },
+                { icon: BarChart2,  color: 'green',  badge: '5 Rank Tiers',     title: 'Rank Progression',         desc: 'Progress from Unranked to Founder through round completions and referral building. Each rank unlocks higher commission rates and platform privileges.' },
+                { icon: Lock,       color: 'yellow', badge: 'Self-Sovereign',   title: 'Non-Custodial',            desc: "Your funds are never held by 100Cycle. Smart contracts custody assets during active rounds. Withdrawals go directly on-chain to your wallet — no KYC, no gatekeeping." },
+                { icon: Globe,      color: 'cyan',   badge: 'Open to All',      title: 'Permissionless Access',    desc: 'Any wallet on BNB Smart Chain can participate. No registration, no approval process. Connect your wallet and join the next available position instantly.' },
               ].map((feat, i) => {
                 const clrMap: Record<string, string> = {
                   blue:   'bg-blue-500/20 text-blue-400 border-blue-500/30',
@@ -260,7 +260,7 @@ export default function Landing() {
                 Commission System
               </div>
               <h2 className="text-3xl sm:text-5xl font-black text-white mb-4">Rank & Commission Tiers</h2>
-              <p className="text-gray-400 max-w-xl mx-auto">Build your network and earn passive income as your referrals cycle</p>
+              <p className="text-gray-400 max-w-xl mx-auto">Build your network and earn passive income as your referrals complete their rounds</p>
             </motion.div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -279,7 +279,7 @@ export default function Landing() {
                     </div>
                     <div className={`text-base font-black mb-1 ${info.color}`}>{info.label}</div>
                     <div className="text-4xl font-black text-white mb-1">{info.commissionRate}%</div>
-                    <div className="text-gray-400 text-xs mb-4">Per cycle commission</div>
+                    <div className="text-gray-400 text-xs mb-4">Per round commission</div>
                     <div className={`text-xs px-3 py-1.5 rounded-lg ${info.bgColor} ${info.color} border ${info.borderColor} leading-relaxed`}>
                       {info.requirement}
                     </div>
@@ -297,18 +297,18 @@ export default function Landing() {
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs mb-4">
                 Transparent Economics
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">Cycle Reward Table</h2>
-              <p className="text-gray-400">Fixed, on-chain reward structure — no surprises</p>
+              <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">Payout Table by Round</h2>
+              <p className="text-gray-400">Fixed, on-chain payout structure — no surprises</p>
             </motion.div>
 
             <motion.div {...fadeUp(0.1)} className="glass-card rounded-2xl overflow-hidden">
               <div className="grid grid-cols-6 gap-0 text-xs font-semibold text-gray-400 uppercase tracking-wider p-4 border-b border-white/5 bg-white/2">
-                <div>Cycle</div>
+                <div>Round</div>
                 <div className="text-center">Deposit</div>
                 <div className="text-center">Referrals</div>
                 <div className="text-center">Gross</div>
                 <div className="text-center">Withdraw</div>
-                <div className="text-center">Auto-Roll</div>
+                <div className="text-center">Auto-Renew</div>
               </div>
               {CYCLE_TABLE.map((row, i) => (
                 <div key={row.cycle} className={`grid grid-cols-6 gap-0 p-4 text-sm ${i < CYCLE_TABLE.length - 1 ? 'border-b border-white/5' : ''} hover:bg-white/2 transition-colors`}>
@@ -328,9 +328,9 @@ export default function Landing() {
 
             <motion.div {...fadeUp(0.3)} className="grid sm:grid-cols-3 gap-4 mt-6">
               {[
-                { icon: Shield,     color: 'blue',  title: '10% Platform Fee',    desc: 'Applies only on withdrawals, not on auto-rolled stakes.' },
-                { icon: RefreshCw,  color: 'teal',  title: 'Infinite Cycles',     desc: "No limit on how many cycles you can complete. Each cycle's $100 auto-rolls." },
-                { icon: TrendingUp, color: 'green', title: 'Compounding Returns', desc: 'Cycle rewards increase as you build referral networks and climb ranks.' },
+                { icon: Shield,     color: 'blue',  title: '10% Platform Fee',    desc: 'Applies only on withdrawals, not on auto-renewed contributions.' },
+                { icon: RefreshCw,  color: 'teal',  title: 'Infinite Rounds',     desc: "No limit on how many rounds you can complete. Each round's $100 auto-renews." },
+                { icon: TrendingUp, color: 'green', title: 'Compounding Returns', desc: 'Payouts increase as you build referral networks and climb ranks.' },
               ].map(card => {
                 const clr = { blue: 'bg-blue-500/20 text-blue-400', teal: 'bg-teal-500/20 text-teal-400', green: 'bg-green-500/20 text-green-400' }[card.color];
                 return (
@@ -359,13 +359,13 @@ export default function Landing() {
                 </div>
                 <h2 className="text-3xl sm:text-4xl font-black text-white mb-6">Built for Security.<br />Designed for Trust.</h2>
                 <p className="text-gray-400 leading-relaxed mb-8">
-                  Every reward, movement, and payout is executed on-chain by smart contracts. No admin has the power to pause your earnings, freeze your funds, or alter the board mechanics.
+                  Every contribution, movement, and payout is executed on-chain by smart contracts. No admin has the power to pause your payouts, freeze your funds, or alter the platform mechanics.
                 </p>
                 <div className="space-y-4">
                   {[
-                    { icon: Lock,        title: 'Non-Custodial Funds',  desc: 'Smart contracts hold deposits during active cycles only. Completed rewards go directly to your wallet.' },
+                    { icon: Lock,        title: 'Non-Custodial Funds',  desc: 'Smart contracts hold contributions during active rounds only. Completed payouts go directly to your wallet.' },
                     { icon: CheckCircle, title: 'Auditable On-Chain',   desc: 'Every transaction is permanently recorded on BNB Smart Chain. Verify any action on BscScan.' },
-                    { icon: Shield,      title: 'No Admin Backdoors',   desc: 'Contracts are immutable post-deployment. The team cannot modify reward logic or halt payouts.' },
+                    { icon: Shield,      title: 'No Admin Backdoors',   desc: 'Contracts are immutable post-deployment. The team cannot modify payout logic or halt distributions.' },
                     { icon: Globe,       title: 'Open Participation',   desc: 'No KYC, no whitelists. Any BNB Smart Chain wallet can join immediately.' },
                   ].map(item => (
                     <div key={item.title} className="flex gap-3">
@@ -408,10 +408,10 @@ export default function Landing() {
 
                 <div className="grid grid-cols-2 gap-4">
                   {[
-                    { value: '100',   color: 'text-white',   label: 'Board Slots' },
-                    { value: '$200',  color: 'text-yellow-400', label: 'Cycle 1 Payout' },
+                    { value: '100',   color: 'text-white',   label: 'Positions' },
+                    { value: '$200',  color: 'text-yellow-400', label: 'Round 1 Payout' },
                     { value: '5%',    color: 'text-green-400',  label: 'Max Commission' },
-                    { value: '∞',     color: 'text-blue-400',   label: 'Cycles Possible' },
+                    { value: '∞',     color: 'text-blue-400',   label: 'Rounds Possible' },
                   ].map(c => (
                     <div key={c.label} className="glass-card rounded-xl p-4 text-center border border-white/5">
                       <div className={`text-2xl font-black ${c.color}`}>{c.value}</div>
@@ -465,14 +465,14 @@ export default function Landing() {
                 <div className="w-16 h-16 rounded-2xl bg-blue-500/20 border border-blue-500/40 flex items-center justify-center mx-auto mb-6">
                   <Shield size={28} className="text-blue-400" />
                 </div>
-                <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">Ready to Enter the Grid?</h2>
+                <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">Ready to Join the Circle?</h2>
                 <p className="text-gray-400 mb-8 max-w-lg mx-auto leading-relaxed">
-                  Join thousands of players already cycling on ChainGrid. Connect your wallet, deposit once, and let the board engine work for you.
+                  Join thousands of members already participating on 100Cycle. Connect your wallet, contribute once, and let the platform engine work for you.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   {wallet.isConnected ? (
                     <Link to="/board" className="btn-primary inline-flex items-center gap-2 text-base px-8 py-3.5">
-                      <Zap size={18} />Enter the Board
+                      <Zap size={18} />Join the Platform
                     </Link>
                   ) : (
                     <button onClick={() => setWalletOpen(true)} className="btn-primary inline-flex items-center gap-2 text-base px-8 py-3.5">
@@ -486,7 +486,7 @@ export default function Landing() {
                 <div className="flex items-center justify-center gap-6 mt-8 text-xs text-gray-600">
                   <span className="flex items-center gap-1.5"><CheckCircle size={12} className="text-green-400" />No KYC</span>
                   <span className="flex items-center gap-1.5"><CheckCircle size={12} className="text-green-400" />No Registration</span>
-                  <span className="flex items-center gap-1.5"><CheckCircle size={12} className="text-green-400" />Instant Entry</span>
+                  <span className="flex items-center gap-1.5"><CheckCircle size={12} className="text-green-400" />Instant Access</span>
                 </div>
               </div>
             </motion.div>

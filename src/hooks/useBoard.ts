@@ -6,8 +6,10 @@ export function useBoard(userAddress?: string | null) {
   const [slots, setSlots] = useState<BoardSlot[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastMoved, setLastMoved] = useState<number | null>(null);
+  const [recentlyMoved, setRecentlyMoved] = useState<Set<number>>(new Set());
   const [moveCount, setMoveCount] = useState(0);
   const lastMovedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const recentlyMovedTimers = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map());
 
   const refresh = useCallback(async () => {
     const data = await getBoardState();
@@ -28,18 +30,33 @@ export function useBoard(userAddress?: string | null) {
           if (idx !== -1) next[idx] = updatedSlot;
           return next;
         });
-        if (updatedSlot.slot_number === 100 && updatedSlot.wallet_address) {
-          setMoveCount(c => c + 1);
-          if (lastMovedTimer.current) clearTimeout(lastMovedTimer.current);
-          setLastMoved(100);
-          lastMovedTimer.current = setTimeout(() => setLastMoved(null), 2000);
-        }
+
+        setMoveCount(c => c + 1);
+
+        if (lastMovedTimer.current) clearTimeout(lastMovedTimer.current);
+        setLastMoved(updatedSlot.slot_number);
+        lastMovedTimer.current = setTimeout(() => setLastMoved(null), 2000);
+
+        const slotNum = updatedSlot.slot_number;
+        setRecentlyMoved(prev => new Set(prev).add(slotNum));
+        const existing = recentlyMovedTimers.current.get(slotNum);
+        if (existing) clearTimeout(existing);
+        const timer = setTimeout(() => {
+          setRecentlyMoved(prev => {
+            const next = new Set(prev);
+            next.delete(slotNum);
+            return next;
+          });
+          recentlyMovedTimers.current.delete(slotNum);
+        }, 2500);
+        recentlyMovedTimers.current.set(slotNum, timer);
       })
       .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
       if (lastMovedTimer.current) clearTimeout(lastMovedTimer.current);
+      recentlyMovedTimers.current.forEach(t => clearTimeout(t));
     };
   }, [refresh]);
 
@@ -61,6 +78,7 @@ export function useBoard(userAddress?: string | null) {
     usersAfterYou,
     remainingToComplete,
     lastMoved,
+    recentlyMoved,
     moveCount,
     refresh,
   };
